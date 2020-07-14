@@ -1,0 +1,14 @@
+{
+  "bitcoind": {
+    "host": "localhost",
+    "port": 8332,
+    "username": "rpcusername",
+    "password": "rpcpassword"
+  },
+  "lookahead": 20,
+  "addresses": [
+    "1***",
+    "3***",
+    "xpub***"
+  ]
+}

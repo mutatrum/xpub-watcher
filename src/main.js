@@ -72,7 +72,7 @@ async function isInitialBlockDownload() {
 
 async function isScanning() {
     const walletInfo = await bitcoin_rpc.getWalletInfo();
-    const scanning = walletInfo.scanning2;
+    const scanning = walletInfo.scanning;
     if (scanning) {
         logger.log(`Scanning: ${(scanning.progress * 100).toFixed(2)}%`);
         return true;

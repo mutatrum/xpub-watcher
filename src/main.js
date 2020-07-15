@@ -17,7 +17,7 @@ module.exports = function(config) {
 
         const networkInfo = await bitcoin_rpc.getNetworkInfo();
     
-        logger.log(`Connected to Bitcoin Core on ${config.bitcoind.host} subversion ${networkInfo.subversion}`);
+        logger.log(`Connected to Bitcoin Core ${networkInfo.subversion} on ${config.bitcoind.host}`);
     
         await createHandlers(config.addresses);
     
@@ -64,7 +64,7 @@ async function onInterval() {
 async function isInitialBlockDownload() {
     const blockchainInfo = await bitcoin_rpc.getBlockchainInfo();
     if (blockchainInfo.initialblockdownload) {
-        logger.log(`Initial block download: ${(blockchainInfo.verificationprogress * 100).toFixed(2)}%`);
+        logger.log(`Initial block download: ${(blockchainInfo.verificationprogress * 100).toFixed(2)}% (block ${blockchainInfo.blocks}/${blockchainInfo.headers})`);
         return true;
     }
     return false;
@@ -80,7 +80,7 @@ async function isScanning() {
     
         let time = new Date();
         time.setSeconds(time.getSeconds() + total - duration);
-        logger.log(`Scanning: ${(progress * 100).toFixed(2)}% (ETA ${time})`);
+        logger.log(`Scanning: ${(progress * 100).toFixed(2)}% (ETA ${time.toISOString()})`);
         return true;
     }
     return false;

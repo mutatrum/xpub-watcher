@@ -5,6 +5,7 @@ module.exports = function(config) {
     this.getBlockchainInfo = () => request('getblockchaininfo', []);
     this.getWalletInfo = () => request('getwalletinfo', []);
     this.listTransactions = (count, skip, watchOnly) => request('listtransactions', ['*', count, skip, watchOnly]);
+    this.listLabels = () => request('listlabels', []);
     this.getAddressesByLabel = (label) => request('getaddressesbylabel', [label]);
     this.getDescriptorInfo = (descriptor) => request('getdescriptorinfo', [descriptor]);
     this.deriveAddresses = (descriptor, range) => request('deriveaddresses', [descriptor, range]);

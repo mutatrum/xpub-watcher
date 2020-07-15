@@ -110,10 +110,14 @@ async function hasNewTransaction() {
 
 async function getRegisteredAddresses() {
     const result = new Set();
-    const addressesByLabel = await bitcoin_rpc.getAddressesByLabel('');
-    for (address in addressesByLabel) {
-        result.add(address);
+    const labels = await bitcoin_rpc.listLabels();
+    if (labels.includes('')) {
+        const addressesByLabel = await bitcoin_rpc.getAddressesByLabel('');
+        for (address in addressesByLabel) {
+            result.add(address);
+        }
     }
+
     return result;
 }
 

@@ -1,3 +1,4 @@
+const logger = require('./logger');
 const AddressDerivator = require('./address-derivator.js');
 
 module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
@@ -17,7 +18,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
         }
 
         if (!isUsed) {
-            console.log(`Address ${address} used (${xpub} m/0/0)`);
+            logger.log(`Address ${address} used (${xpub} m/0/0)`);
             isUsed = true;
         }
 
@@ -31,7 +32,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
                 receiveAddressesImported++;
             }
             if (usedAddresses.has(receiveAddress)) {
-                console.log(`Address ${receiveAddress} used (${xpub} m/0/${receiveIndex})`);
+                logger.log(`Address ${receiveAddress} used (${xpub} m/0/${receiveIndex})`);
                 receiveLookahead = lookahead;
             }
             receiveIndex++;
@@ -49,7 +50,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
                 changeAddressesImported++;
             }
             if (usedAddresses.has(changeAddress)) {
-                console.log(`Address ${changeAddress} used (${xpub} m/1/${changeIndex})`);
+                logger.log(`Address ${changeAddress} used (${xpub} m/1/${changeIndex})`);
                 changeLookahead = lookahead;
             }
             changeIndex++; 

@@ -1,3 +1,4 @@
+const logger = require('./logger');
 module.exports = function(address) {
     let isUsed = false;
     this.registerAddresses = async function(registeredAddresses, usedAddresses, importAddressCallback) {
@@ -9,7 +10,7 @@ module.exports = function(address) {
             if (!isUsed) {
                 if (usedAddresses.has(address)) {
                     isUsed = true;
-                    console.log(`Address ${address} used`);
+                    logger.log(`Address ${address} used`);
                 }
             }
         }

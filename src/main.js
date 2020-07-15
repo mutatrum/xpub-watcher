@@ -1,3 +1,4 @@
+const logger = require('./logger');
 const AddressHandler = require('./address-handler.js');
 const XpubHandler = require('./xpub-handler.js');
 const BitcoinRpc = require('./bitcoin-rpc.js');
@@ -12,15 +13,15 @@ module.exports = function(config) {
     bitcoin_rpc = new BitcoinRpc(config.bitcoind);
     lookahead = config.lookahead;
     this.run = async function() {
-        console.log('XPUB Watcher');
+        logger.log('XPUB Watcher');
 
         const networkInfo = await bitcoin_rpc.getNetworkInfo();
     
-        console.log(`Connected to Bitcoin Core on ${config.bitcoind.host} subversion ${networkInfo.subversion}`);
+        logger.log(`Connected to Bitcoin Core on ${config.bitcoind.host} subversion ${networkInfo.subversion}`);
     
         await createHandlers(config.addresses);
     
-        console.log(`Registered ${handlers.length} address handlers`);
+        logger.log(`Registered ${handlers.length} address handlers`);
     
         onInterval();
         setInterval(onInterval, 60_000);
@@ -46,14 +47,14 @@ async function onInterval() {
     if (!(await hasNewTransaction())) return;
 
     const registeredAddresses = await getRegisteredAddresses();
-    console.log(`Registered addresses: ${registeredAddresses.size}`);
+    logger.log(`Registered addresses: ${registeredAddresses.size}`);
 
     const usedAddresses = await getUsedAddresses();
-    console.log(`Used addresses: ${usedAddresses.size}`);
+    logger.log(`Used addresses: ${usedAddresses.size}`);
 
     const rescanNeeded = await registerAddresses(registeredAddresses, usedAddresses);
     if (rescanNeeded) {
-        console.log("Rescanning blockchain");
+        logger.log("Rescanning blockchain");
 
         bitcoin_rpc.rescanBlockchain();
         lastTransaction = null;
@@ -63,7 +64,7 @@ async function onInterval() {
 async function isInitialBlockDownload() {
     const blockchainInfo = await bitcoin_rpc.getBlockchainInfo();
     if (blockchainInfo.initialblockdownload) {
-        console.log(`Initial block download: ${(blockchainInfo.verificationprogress * 100).toFixed(2)}%`);
+        logger.log(`Initial block download: ${(blockchainInfo.verificationprogress * 100).toFixed(2)}%`);
         return true;
     }
     return false;
@@ -79,7 +80,7 @@ async function isScanning() {
     
         let time = new Date();
         time.setSeconds(time.getSeconds() + total - duration);
-        console.log(`Scanning: ${(progress * 100).toFixed(2)}% (ETA ${time})`);
+        logger.log(`Scanning: ${(progress * 100).toFixed(2)}% (ETA ${time})`);
         return true;
     }
     return false;
@@ -97,9 +98,9 @@ async function hasNewTransaction() {
         if (lastTx.txid == lastTransaction) {
             return false;
         }
-        console.log(`Last transaction: ${lastTx.txid}`);
+        logger.log(`Last transaction: ${lastTx.txid}`);
         if (lastTransaction != null) {
-            console.log(`New transction: ${lastTx.category} ${lastTx.amount.abs()} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
+            logger.log(`New transction: ${lastTx.category} ${lastTx.amount.abs()} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
 
         }
         lastTransaction = lastTx.txid;
@@ -131,7 +132,7 @@ async function getUsedAddresses() {
             }
         }
         count += transactions.length;
-        console.log(`Retrieving transactions (${count})`);
+        logger.log(`Retrieving transactions (${count})`);
     } while (transactions.length == skipSize)
     return result;
 }
@@ -147,6 +148,6 @@ async function registerAddresses(registeredAddresses, usedAddresses)
 }
 
 async function importAddress(address) {
-    console.log(`Import address: ${address}`);
+    logger.log(`Import address: ${address}`);
     await bitcoin_rpc.importAddress(address, null, false, false);
 }

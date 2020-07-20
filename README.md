@@ -63,20 +63,20 @@ The initial startup will most likely take a long time. For each XPUB, it will im
 
 If your wallets are very heavily used, you expect a lot of transactions or have large gaps in addresses, you can increasing the `lookahead` value in the configuration. This will extend the number of pre-imported addresses, cross larger haps and reduce the number of rescan cycles at startup.  
 
-When all the rescans are done, transactions which use a new receive or change address will be picked up by the wallet after the first confirmation. It will extend the lookahead addresses without doing a rescan.
-
-When the initial rescans are don, you can then check the wallet balance with the CLI:
+When all the rescans are finished, transactions which use a new receive or change address will be picked up by the wallet after the first confirmation. It will extend the lookahead addresses without doing a rescan. You can then check the wallet balance with the CLI:
 ```
 bitcoin-cli getbalance "*" 0 true
 ```
-or, for all separate addresses:
+or, get all unspent transaction outputs:
 ```
 bitcoin-cli listunspent
 ```
 
 # Why
 
-Running a bitcoin node is not equal to using a node. Only when verifying any incoming transactions with the node version you selected, you are using bitcoin in a self-sovereign way. This script enables you to use your own full node to verify any incoming transactions into your cold storage. This also makes it easy to integrate into reporting tools, without running any other tools. With this script running, it continuously monitors the wallet and import new lookahead addresses so any future transaction will be added to the wallet as soon as they confirm.
+Running a bitcoin node is not equal to using a node. Only when verifying incoming transactions with the node software you selected and control, you are using bitcoin in a self-sovereign way.
+
+This script enables you to use your own full node to verify any incoming transactions into your cold storage. This also makes it easy to integrate into reporting tools, without running any other tools.
 
 # Example log
 

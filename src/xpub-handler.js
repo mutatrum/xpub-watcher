@@ -9,6 +9,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
         const address = await receiveAddressDerivator.getAddress(0);
 
         if (!registeredAddresses.has(address)) {
+            logger.log(`Address ${address} imported (${xpub} m/0/0)`);
             await importAddress(address);
             return true;
         }
@@ -28,6 +29,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
         while(receiveLookahead-- > 0) {
             const receiveAddress = await receiveAddressDerivator.getAddress(receiveIndex);
             if (!registeredAddresses.has(receiveAddress)) {
+                logger.log(`Address ${receiveAddress} imported (${xpub} m/0/${receiveIndex})`);
                 await importAddress(receiveAddress);
                 receiveAddressesImported++;
             }
@@ -46,6 +48,7 @@ module.exports = function(bitcoin_rpc, xpub, addressType, lookahead) {
         while(changeLookahead-- > 0) {
             const changeAddress = await changeAddressDerivator.getAddress(changeIndex);
             if (!registeredAddresses.has(changeAddress)) {
+                logger.log(`Address ${changeAddress} imported (${xpub} m/0/${changeIndex})`);
                 await importAddress(changeAddress);
                 changeAddressesImported++;
             }

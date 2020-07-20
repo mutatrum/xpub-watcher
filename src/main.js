@@ -146,6 +146,5 @@ async function registerAddresses(registeredAddresses, usedAddresses)
 }
 
 async function importAddress(address) {
-    logger.log(`Import address: ${address}`);
     await bitcoin_rpc.importAddress(address, null, false, false);
 }

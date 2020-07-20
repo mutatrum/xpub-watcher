@@ -78,6 +78,20 @@ Running a bitcoin node is not equal to using a node. Only when verifying incomin
 
 This script enables you to use your own full node to verify any incoming transactions into your cold storage. This also makes it easy to integrate into reporting tools, without running any other tools.
 
+# FAQ
+
+ - Can't I use Electrum or some other indexer service to do this?
+
+Yes, you can. But there might be reasons you might not want an Electrum. This can be storage or computational restraints. Or maybe there are complexity or difficulty constraints. This is a simple tool which does only a single thing: importing addresses from your XPUBs, nothing more, nothing else. This scratched my itch. And maybe it'll scratch someone else's itch as well.
+
+ - Why can't I use a online service to find information of my XPUB?
+
+ An XPUB is privacy sensitive. Once a 3rd party has your XPUB, it can link all your historical as well as all your future transactions. This is bad. Secondly, leaking a private key of one of the derived addresses can compromise all funds on all derived addressed.
+
+  - Does it do multisig?
+
+No, multisig is outside the scope of this tool.
+
 # Example log
 
 When connected to a node during initial block download:

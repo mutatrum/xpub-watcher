@@ -76,19 +76,64 @@ bitcoin-cli listunspent
 
 # Why
 
-Running a bitcoin node is not equal to using a node. This script enabled me to receive transactions into cold storage while at the same time verifying these transaction using a full node. This enabled me to easilty integrate this into reporting tools, without running any other tools. With this script running, it continuously monitors the wallet and import new lookahead addresses so any future transaction will be added to the wallet as soon as they confirm.
+Running a bitcoin node is not equal to using a node. Only when verifying any incoming transactions with the node version you selected, you are using bitcoin in a self-sovereign way. This script enables you to use your own full node to verify any incoming transactions into your cold storage. This also makes it easy to integrate into reporting tools, without running any other tools. With this script running, it continuously monitors the wallet and import new lookahead addresses so any future transaction will be added to the wallet as soon as they confirm.
 
 # Example log
 
-When connected to a brand new node:
+When connected to a node during initial block download:
 ```
-[2020-07-15T09:46:08.141Z] XPUB Watcher
-[2020-07-15T09:46:08.151Z] Connected to Bitcoin Core on localhost subversion /Satoshi:0.20.0/
-[2020-07-15T09:46:08.151Z] Registered 11 address handlers
-[2020-07-15T09:46:08.153Z] Initial block download: 0.00%
-[2020-07-15T09:47:08.159Z] Initial block download: 0.01%
-[2020-07-15T09:48:08.157Z] Initial block download: 0.02%
+[2020-07-15T14:20:04.810Z] XPUB Watcher
+[2020-07-15T14:20:04.928Z] Connected to Bitcoin Core /Satoshi:0.20.0/ on localhost
+[2020-07-15T14:20:04.928Z] Registered 3 address handlers
+[2020-07-15T14:20:04.930Z] Initial block download: 43.66% (block 475565/639380)
+[2020-07-15T14:21:04.935Z] Initial block download: 43.83% (block 476188/639380)
+[2020-07-15T14:23:13.865Z] Initial block download: 43.96% (block 476630/639380)
 ...
+```
+For each XPUB, it will import the legacy (1*), segwit (3) and native segwit (bc1) addresses and initiate a rescan:
+```
+[2020-07-15T23:01:25.596Z] XPUB Watcher
+[2020-07-15T23:01:25.614Z] Connected to Bitcoin Core /Satoshi:0.20.0/ on localhost
+[2020-07-15T23:01:25.615Z] Registered 3 address handlers
+[2020-07-15T23:01:25.622Z] Registered addresses: 0
+[2020-07-15T23:01:25.623Z] Retrieving transactions (0)
+[2020-07-15T23:01:25.623Z] Used addresses: 0
+[2020-07-15T23:01:25.659Z] Address 1G***o imported (xpub6***d m/0/0)
+[2020-07-15T23:01:25.683Z] Address 3E***K imported (xpub6***d m/0/0)
+[2020-07-15T23:01:25.704Z] Address bc1q***f imported (xpub6***d m/0/0)
+[2020-07-15T23:01:25.852Z] Rescanning blockchain
+[2020-07-15T23:02:25.897Z] Rescanning blockchain: 1.34%
+[2020-07-15T23:03:25.877Z] Rescanning blockchain: 2.91%
+[2020-07-15T23:04:25.878Z] Rescanning blockchain: 4.35%
+...
+```
+After the rescan, for each of the addresses that received a transaction it will import 20 receive (m/0) and 20 change (m/1) lookahead addresses:
+```
+[2020-07-16T01:03:39.233Z] Address bc1q***f used (xpub6***d m/0/0)
+[2020-07-16T01:03:39.234Z] Address bc1q***c imported (xpub6***d m/0/1)
+[2020-07-16T01:03:39.234Z] Address bc1q***v imported (xpub6***d m/0/2)
+[2020-07-16T01:03:39.234Z] Address bc1q***q imported (xpub6***d m/0/3)
+...
+[2020-07-16T01:03:39.234Z] Address bc1q***r imported (xpub6***d m/1/0)
+[2020-07-16T01:03:39.234Z] Address bc1q***8 imported (xpub6***d m/1/1)
+[2020-07-16T01:03:39.234Z] Address bc1q***w imported (xpub6***d m/1/2)
+...
+```
+On subsequent cycles, it will import 20 addresses beyond the last used address in each chain. If more then 10 addresses are imported on a chain, it will trigger a rescan.
+
+When all addresses are imported, it will poll the node once a minute for new incoming transactions and import a new lookahead address:
+```
+[2020-07-20T11:18:58.592Z] New transction: receive 6.15 BTC on bc1q***v
+[2020-07-20T11:18:58.594Z] Registered addresses: 204
+[2020-07-20T11:18:58.599Z] Retrieving transactions (100)
+[2020-07-20T11:18:58.604Z] Retrieving transactions (200)
+...
+[2020-07-20T11:18:58.908Z] Retrieving transactions (1064)
+[2020-07-20T11:18:58.908Z] Used addresses: 79
+[2020-07-20T11:18:58.975Z] Address bc1***s used (xpub6***d m/0/5)
+[2020-07-20T11:18:58.975Z] Address bc1***0 used (xpub6***d m/0/6)
+[2020-07-20T11:18:58.975Z] Address bc1***v used (xpub6***d m/0/7)
+[2020-07-20T11:18:58.978Z] Address bc1***z imported (xpub6***d m/0/27)
 ```
 
 # Disclaimers

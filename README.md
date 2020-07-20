@@ -123,7 +123,7 @@ On subsequent cycles, it will import 20 addresses beyond the last used address i
 
 When all addresses are imported, it will poll the node once a minute for new incoming transactions and import a new lookahead address:
 ```
-[2020-07-20T11:18:58.592Z] New transction: receive 6.15 BTC on bc1q***v
+[2020-07-20T11:18:58.592Z] New transaction: receive 6.15 BTC on bc1q***v
 [2020-07-20T11:18:58.594Z] Registered addresses: 204
 [2020-07-20T11:18:58.599Z] Retrieving transactions (100)
 [2020-07-20T11:18:58.604Z] Retrieving transactions (200)

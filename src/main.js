@@ -94,7 +94,7 @@ async function hasNewTransaction() {
         }
         logger.log(`Last transaction: ${lastTx.txid}`);
         if (lastTransaction != null) {
-            logger.log(`New transction: ${lastTx.category} ${Math.abs(lastTx.amount)} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
+            logger.log(`New transaction: ${lastTx.category} ${Math.abs(lastTx.amount)} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
 
         }
         lastTransaction = lastTx.txid;

@@ -74,7 +74,7 @@ async function isScanning() {
     const walletInfo = await bitcoin_rpc.getWalletInfo();
     const scanning = walletInfo.scanning;
     if (scanning) {
-        logger.log(`Scanning: ${(scanning.progress * 100).toFixed(2)}%`);
+        logger.log(`Rescanning blockchain: ${(scanning.progress * 100).toFixed(2)}%`);
         return true;
     }
     return false;
@@ -94,7 +94,7 @@ async function hasNewTransaction() {
         }
         logger.log(`Last transaction: ${lastTx.txid}`);
         if (lastTransaction != null) {
-            logger.log(`New transction: ${lastTx.category} ${lastTx.amount.abs()} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
+            logger.log(`New transction: ${lastTx.category} ${Math.abs(lastTx.amount)} BTC ${lastTx.category == 'receive' ? 'on' : 'to'} ${lastTx.address}`);
 
         }
         lastTransaction = lastTx.txid;

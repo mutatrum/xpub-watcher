@@ -1,4 +1,5 @@
 const http = require('http');
+const logger = require('./logger');
 
 module.exports = function(config) {
     this.getNetworkInfo = () => request('getnetworkinfo', []);
@@ -38,6 +39,7 @@ module.exports = function(config) {
                     resolve(result.result); 
                 });
             }).on('error', (error) => {
+                logger.log(`Error: ${error}`);
                 reject(error);
             });
     

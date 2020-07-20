@@ -1,10 +1,10 @@
 # XPUB Watcher
 
-This repository provides scripts to derive receive and change addresses from XPUBs and import them into a Bitcoin Core watch-only wallet.
+This repository provides a script to derive receive and change addresses from XPUBs and import them into a Bitcoin Core watch-only wallet.
 
 # What it does
 
-It periodically checks for new incoming transactions and imports new lookahead addresses on active chains. This script provides a simple way to verify incoming transactions on a full bitcoin node while at the same time leverage the security of hardware wallets.
+This script periodically checks for new incoming transactions and imports new lookahead addresses on active chains. It provides a simple way to verify incoming transactions on a full bitcoin node while at the same time leverage the security of a hardware wallet.
 
 # Requirements
 
@@ -23,7 +23,7 @@ Review the code.
 
 There are no external dependencies. It uses the built-in `http` library to communicate with the bitcoin node.
 
-Edit `config.json` by supplying parameters for communicating with Bitcoin Core and add your XPUBs. You can also add single use addresses from legacy wallets:
+Edit `config.json` by supplying RPC credentials for communicating with Bitcoin Core and add your XPUBs. You can also add single addresses from legacy wallets:
 ```
 {
   "bitcoind": {
@@ -59,7 +59,7 @@ For installing PM2, see https://pm2.keymetrics.io/docs/usage/quick-start/.
 
 # Initial startup
 
-The initial startup will most likely take a long time. For each XPUB, it will import the base address in p2pkh (Legacy 1x), p2sh (Segwit 3x) and bech32 (Native Segwit bc1x) format. The script will then initiate a full rescan which will probably take several hours. After the initial rescan, it will add the lookahead change and receive addresses for each base address is active, e.g. that receive a transaction. After this, it will initiate another rescan and repeat this cycle until there are 20 lookahead addresses per active chain. 
+The initial startup will most likely take a long time. For each XPUB, it will import the base address in p2pkh (Legacy 1x), p2sh (Segwit 3x) and bech32 (Native Segwit bc1x) format. The script will then initiate a full rescan which will probably take several hours. After the initial rescan, it will add the lookahead change and receive addresses for each base address (`m/0/0`) is active, e.g. that receive a transaction. After this, it will initiate another rescan and repeat this cycle until there are 20 lookahead addresses per active chain. 
 
 If your wallets are very heavily used, you expect a lot of transactions or have large gaps in addresses, you can increasing the `lookahead` value in the configuration. This will extend the number of pre-imported addresses, cross larger haps and reduce the number of rescan cycles at startup.  
 
@@ -90,7 +90,7 @@ When connected to a node during initial block download:
 [2020-07-15T14:23:13.865Z] Initial block download: 43.96% (block 476630/639380)
 ...
 ```
-For each XPUB, it will import the legacy (1*), segwit (3) and native segwit (bc1) addresses and initiate a rescan:
+For each XPUB, it will import the legacy (1x), segwit (3x) and native segwit (bc1x) addresses and initiate a rescan:
 ```
 [2020-07-15T23:01:25.596Z] XPUB Watcher
 [2020-07-15T23:01:25.614Z] Connected to Bitcoin Core /Satoshi:0.20.0/ on localhost
@@ -107,7 +107,7 @@ For each XPUB, it will import the legacy (1*), segwit (3) and native segwit (bc1
 [2020-07-15T23:04:25.878Z] Rescanning blockchain: 4.35%
 ...
 ```
-After the rescan, for each of the addresses that received a transaction it will import 20 receive (m/0) and 20 change (m/1) lookahead addresses:
+After the rescan, for each of the addresses that received a transaction it will import 20 receive (`m/0`) and 20 change (`m/1`) lookahead addresses:
 ```
 [2020-07-16T01:03:39.233Z] Address bc1q***f used (xpub6***d m/0/0)
 [2020-07-16T01:03:39.234Z] Address bc1q***c imported (xpub6***d m/0/1)

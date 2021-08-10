@@ -16,7 +16,7 @@ module.exports = function(config) {
         logger.log('XPUB Watcher');
 
         const networkInfo = await bitcoin_rpc.getNetworkInfo();
-    
+
         logger.log(`Connected to Bitcoin Core ${networkInfo.subversion} on ${config.bitcoind.host}`);
 
         await loadWallet(config.wallet);
@@ -26,9 +26,9 @@ module.exports = function(config) {
         logger.log(`Wallet '${walletInfo.walletname}' loaded`);
 
         await createHandlers(config.addresses);
-    
+
         logger.log(`Registered ${handlers.length} address handlers`);
-    
+
         onInterval();
         setInterval(onInterval, 60_000);
     }
@@ -43,13 +43,12 @@ async function loadWallet(wallet_name) {
     if (walletDir.wallets.map(wallet => wallet.name).includes(wallet_name)) {
 
       await bitcoin_rpc.loadWallet(wallet_name);
-      
+
     } else {
 
       logger.log(`Creating new wallet`);
 
       await bitcoin_rpc.createWallet(wallet_name);
-
     }
   }
 }
@@ -166,7 +165,7 @@ async function registerAddresses(registeredAddresses, usedAddresses)
     let result = false;
     for (handler of handlers) {
         const rescanNeeded = await handler.registerAddresses(registeredAddresses, usedAddresses, importAddress);
-        result ^= rescanNeeded;
+        if (rescanNeeded) result = true;
     }
     return result;
 }

@@ -48,7 +48,7 @@ async function loadWallet(wallet_name) {
 
       logger.log(`Creating new wallet`);
 
-      await bitcoin_rpc.createWallet(config.wallet);
+      await bitcoin_rpc.createWallet(wallet_name);
 
     }
   }

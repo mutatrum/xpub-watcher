@@ -32,6 +32,7 @@ Copy `config-template.json` to `config.json` and fill in the RPC credentials for
     "username": "rpcusername",
     "password": "rpcpassword"
   },
+  "wallet", "walletname",
   "lookahead": 20,
   "addresses": [
     "1***",
@@ -65,11 +66,11 @@ If your wallets are very heavily used, you expect a lot of transactions or have 
 
 When all the rescans are finished, transactions which use a new receive or change address will be picked up by the wallet after the first confirmation. It will extend the lookahead addresses without doing a rescan. You can then check the wallet balance with the CLI:
 ```
-bitcoin-cli getbalance "*" 0 true
+bitcoin-cli -rpcwallet="walletname" getbalance "*" 0 true
 ```
 or, get all unspent transaction outputs:
 ```
-bitcoin-cli listunspent
+bitcoin-cli -rpcwallet="walletname" listunspent
 ```
 
 # Why
@@ -86,7 +87,7 @@ Yes, you can. But there might be reasons you might not want an Electrum. This ca
 
  - Why can't I use a online service to find information of my XPUB?
 
- An XPUB is privacy sensitive. Once a 3rd party has your XPUB, it can link all your historical as well as all your future transactions. This is bad. Secondly, leaking a private key of one of the derived addresses can compromise all funds on all derived addressed.
+An XPUB is privacy sensitive. Once a 3rd party has your XPUB, it can link all your historical as well as all your future transactions. This is bad. Secondly, leaking a private key of one of the derived addresses can compromise all funds on all derived addressed.
 
   - Does it do multisig?
 
@@ -98,6 +99,8 @@ When connected to a node during initial block download:
 ```
 [2020-07-15T14:20:04.810Z] XPUB Watcher
 [2020-07-15T14:20:04.928Z] Connected to Bitcoin Core /Satoshi:0.20.0/ on localhost
+[2020-07-15T14:20:04.928Z] Creating new wallet
+[2020-07-15T14:20:04.928Z] Wallet 'walletname' loaded
 [2020-07-15T14:20:04.928Z] Registered 3 address handlers
 [2020-07-15T14:20:04.930Z] Initial block download: 43.66% (block 475565/639380)
 [2020-07-15T14:21:04.935Z] Initial block download: 43.83% (block 476188/639380)
@@ -108,6 +111,7 @@ For each XPUB, it will import the legacy (1x), segwit (3x) and native segwit (bc
 ```
 [2020-07-15T23:01:25.596Z] XPUB Watcher
 [2020-07-15T23:01:25.614Z] Connected to Bitcoin Core /Satoshi:0.20.0/ on localhost
+[2020-07-15T23:01:25.614Z] Wallet 'walletname' loaded
 [2020-07-15T23:01:25.615Z] Registered 3 address handlers
 [2020-07-15T23:01:25.622Z] Registered addresses: 0
 [2020-07-15T23:01:25.623Z] Retrieving transactions (0)

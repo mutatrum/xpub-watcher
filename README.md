@@ -23,7 +23,7 @@ Review the code.
 
 There are no external dependencies. It uses the built-in `http` library to communicate with the bitcoin node.
 
-Edit `config.json` by supplying RPC credentials for communicating with Bitcoin Core and add your XPUBs. You can also add single addresses from legacy wallets:
+Copy `config-template.json` to `config.json` and fill in the RPC credentials for communicating with Bitcoin Core and add your XPUBs. You can also add single addresses from legacy wallets:
 ```
 {
   "bitcoind": {

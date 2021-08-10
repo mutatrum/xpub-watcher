@@ -1,12 +1,16 @@
 const http = require('http');
 const logger = require('./logger');
 
-module.exports = function(config) {
+module.exports = function(config, wallet_name) {
     this.getNetworkInfo = () => request('getnetworkinfo', []);
     this.getBlockchainInfo = () => request('getblockchaininfo', []);
     this.getWalletInfo = () => request('getwalletinfo', []);
     this.listTransactions = (count, skip, watchOnly) => request('listtransactions', ['*', count, skip, watchOnly]);
-    this.listLabels = () => request('listlabels', []);
+    this.listWalletDir = () => request('listwalletdir', []);
+    this.listWallets = () => request('listwallets', []);
+    this.createWallet = (wallet_name) => request('createwallet', [wallet_name, true]);
+    this.loadWallet = (wallet_name) => request('loadwallet', [wallet_name]);
+    this.getWalletInfo = () => request('getwalletinfo', []);
     this.getAddressesByLabel = (label) => request('getaddressesbylabel', [label]);
     this.getDescriptorInfo = (descriptor) => request('getdescriptorinfo', [descriptor]);
     this.deriveAddresses = (descriptor, range) => request('deriveaddresses', [descriptor, range]);
@@ -17,6 +21,7 @@ module.exports = function(config) {
     const options = {
         host: config.host,
         port: config.port,
+        path: `/wallet/${wallet_name}`,
         method: 'POST',
         headers : {
             'Content-Type': 'application/json',

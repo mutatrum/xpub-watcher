@@ -5,6 +5,7 @@
     "username": "rpcusername",
     "password": "rpcpassword"
   },
+  "wallet": "",
   "lookahead": 20,
   "addresses": [
     "1***",

@@ -8,9 +8,11 @@ const handlers = [];
 let lastTransaction;
 let bitcoin_rpc;
 let lookahead;
+let wallet_name;
 
 module.exports = function(config) {
     bitcoin_rpc = new BitcoinRpc(config.bitcoind, config.wallet);
+    wallet_name = config.wallet;
     lookahead = config.lookahead;
     this.run = async function() {
         logger.log('XPUB Watcher');
@@ -19,7 +21,7 @@ module.exports = function(config) {
 
         logger.log(`Connected to Bitcoin Core ${networkInfo.subversion} on ${config.bitcoind.host}`);
 
-        await loadWallet(config.wallet);
+        await loadWallet();
 
         const walletInfo = await bitcoin_rpc.getWalletInfo()
 
@@ -34,7 +36,7 @@ module.exports = function(config) {
     }
 }
 
-async function loadWallet(wallet_name) {
+async function loadWallet() {
   const wallets = await bitcoin_rpc.listWallets();
 
   if (!wallets.includes(wallet_name)) {
@@ -129,12 +131,9 @@ async function hasNewTransaction() {
 
 async function getRegisteredAddresses() {
     const result = new Set();
-    const labels = await bitcoin_rpc.listWallets();
-    if (labels.includes('')) {
-        const addressesByLabel = await bitcoin_rpc.getAddressesByLabel('');
-        for (address in addressesByLabel) {
-            result.add(address);
-        }
+    const addressesByLabel = await bitcoin_rpc.getAddressesByLabel('');
+    for (address in addressesByLabel) {
+        result.add(address);
     }
 
     return result;
